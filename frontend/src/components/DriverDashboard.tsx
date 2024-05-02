@@ -5,47 +5,47 @@ import CardContent from '@mui/material/CardContent';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 
-import ShipmentRequest from './ShipmentRequest';
+import Passenger from './PassengerRequest';
 import { socketEvents } from '../constants';
-import { IDeliveryAssociate, IShipment, ShipmentStatus } from '../types';
-import { updateShipmentStatus, updateShipmentDeliveryAssociate } from '../api';
+import { IdriverAssociate, IPassenger, PassengerStatus } from '../types';
+import { updatePassengerStatus, updatePassengerDriverAssociate } from '../api';
 
 type Props = {
   socket: any;
-  setShipmentData: any;
+  setPassengerData: any;
 };
 
 const DriverDashboard = (props: Props) => {
   // @ts-ignore
-  const [newShipmentRequest, setNewShipmentRequest] = useState<IShipment>({});
+  const [newPassengerRequest, setNewPassengerRequest] = useState<IPassenger>({});
 
   const email = sessionStorage.getItem('driverEmail') || '';
   const name = email.substring(0, email.indexOf('@'));
   const nameCaseCorrected = name.charAt(0).toUpperCase() + name.slice(1);
 
   useEffect(() => {
-    props.socket.on(socketEvents.SHIPMENT_CREATED, (data: any) => {
-      setNewShipmentRequest(data);
+    props.socket.on(socketEvents.PASSENGER_CREATED, (data: any) => {
+      setNewPassengerRequest(data);
     });
   }, []);
 
   const onAccept = async () => {
-    await updateShipmentStatus(
-      newShipmentRequest?._id,
-      ShipmentStatus.deliveryAssociateAssigned
+    await updatePassengerStatus(
+      newPassengerRequest?._id,
+      PassengerStatus.driverAssociateAssigned
     );
     const email = sessionStorage.getItem('driverEmail') || '';
-    const shipmentData = await updateShipmentDeliveryAssociate(
-      newShipmentRequest?._id,
+    const PassengerData = await updatePassengerDriverAssociate(
+      newPassengerRequest?._id,
       email
     );
-    props.setShipmentData(shipmentData.data);
+    props.setPassengerData(PassengerData.data);
     // @ts-ignore
-    setNewShipmentRequest({});
+    setNewPassengerRequest({});
   };
   const onReject = () => {
     // @ts-ignore
-    setNewShipmentRequest({});
+    setNewPassengerRequest({});
   };
   return (
     <div
@@ -77,9 +77,9 @@ const DriverDashboard = (props: Props) => {
         </CardContent>
       </Card>
       <div style={{ margin: '20px 0px' }}>
-        {/* New Shipment Notification */}
-        {newShipmentRequest._id ? (
-          <ShipmentRequest onAccept={onAccept} onReject={onReject} />
+        {/* New Passenger Notification */}
+        {newPassengerRequest._id ? (
+          <Passenger onAccept={onAccept} onReject={onReject} />
         ) : null}
       </div>
     </div>

@@ -1,12 +1,12 @@
-import DeliveryAssociateCollection, {
-  IDeliveryAssociateDocument,
+import DriverAssociateCollection, {
+  IDriverAssociateDocument,
 } from '../../models/driver';
 
 const findByEmail = async (
   email: string
-): Promise<IDeliveryAssociateDocument | null> => {
+): Promise<IDriverAssociateDocument | null> => {
   try {
-    const collection = await DeliveryAssociateCollection();
+    const collection = await DriverAssociateCollection();
     const associate = await collection.findOne({ email });
     return associate;
   } catch (error) {

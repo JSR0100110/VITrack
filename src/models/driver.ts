@@ -1,22 +1,22 @@
 import { ObjectId, Collection, Document } from 'mongodb';
-import IDeliveryAssociate from '../types/Idriver';
+import IDriverAssociate from '../types/Idriver';
 import dbClient from '../dbClient';
 import { dbCollections } from '../constants';
 
-export interface IDeliveryAssociateDocument
-  extends IDeliveryAssociate,
+export interface IDriverAssociateDocument
+  extends IDriverAssociate,
     Document {
   _id?: ObjectId;
 }
 
-const DeliveryAssociateCollection = async (): Promise<
-  Collection<IDeliveryAssociateDocument>
+const DriverAssociateCollection = async (): Promise<
+  Collection<IDriverAssociateDocument>
 > => {
   const mongoClient = await dbClient();
-  const collection: Collection<IDeliveryAssociateDocument> = mongoClient
+  const collection: Collection<IDriverAssociateDocument> = mongoClient
     .db()
-    .collection(dbCollections.deliveryAssociates);
+    .collection(dbCollections.driverAssociates);
   return collection;
 };
 
-export default DeliveryAssociateCollection;
+export default DriverAssociateCollection;

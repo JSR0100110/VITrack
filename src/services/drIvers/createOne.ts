@@ -1,14 +1,14 @@
-import DeliveryAssociateCollection, {
-  IDeliveryAssociateDocument,
+import DriverAssociateCollection, {
+  IDriverAssociateDocument,
 } from '../../models/driver';
-import IDeliveryAssociate from '../../types/Idriver';
+import IDriverAssociate from '../../types/Idriver';
 
 export default async function createOne(
-  deliveryAssociate: IDeliveryAssociate
-): Promise<IDeliveryAssociateDocument> {
+  driverAssociate: IDriverAssociate
+): Promise<IDriverAssociateDocument> {
   try {
-    const collection = await DeliveryAssociateCollection();
-    const newDoc = await collection.insertOne(deliveryAssociate);
+    const collection = await DriverAssociateCollection();
+    const newDoc = await collection.insertOne(driverAssociate);
     const result = await collection.findOne({ _id: newDoc.insertedId });
     return result;
   } catch (error) {

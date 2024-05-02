@@ -1,9 +1,9 @@
 import { Server } from 'socket.io';
 import { socketEvents } from '../constants';
-import DeliveryAssociateCollection from '../models/driver';
+import DriverAssociateCollection from '../models/driver';
 
 const watcher = async (io: Server) => {
-  const collection = await DeliveryAssociateCollection();
+  const collection = await DriverAssociateCollection();
   const changeStream = collection.watch([], { fullDocument: 'updateLookup' });
   changeStream.on('change', (event) => {
     if (event.operationType === 'update') {

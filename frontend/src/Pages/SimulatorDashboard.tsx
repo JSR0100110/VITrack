@@ -15,18 +15,18 @@ import {
 import { DRIVER_EMAIL_DEFAULT, API_URL, socketEvents } from '../constants';
 
 import {
-  IShipment,
-  ShipmentStatus,
-  IDeliveryAssociate,
+  IPassenger,
+  PassengerStatus,
+  IdriverAssociate,
   IUpdateDALocation,
 } from '../types';
 
-import iconDeliveryAssociate from '../assets/icon_delivery_associate.svg';
+import iconDriverAssociate from '../assets/icon_driver_associate.svg';
 import iconPickup from '../assets/icon_pickup.svg';
 import iconDrop from '../assets/icon_drop.svg';
 
 import DriverDashboard from '../components/DriverDashboard';
-import ShipmentDashboard from '../components/ShipmentDashboard';
+import PassengerDashboard from '../components/PassengerDashboard';
 
 import './dashboard.css';
 
@@ -47,11 +47,11 @@ const THROTTLE_DELAY = 50;
 const socket = io(API_URL);
 
 const SimulatorDashboard = () => {
-  const [deliveryAssociate, setDeliveryAssociate] =
+  const [driverAssociate, setDriverAssociate] =
     // @ts-ignore
-    useState<IDeliveryAssociate>({});
+    useState<IdriverAssociate>({});
   // @ts-ignore
-  const [shipmentData, setShipmentData] = useState<IShipment>({});
+  const [passengerData, setPassengerData] = useState<IPassenger>({});
   const [isConnected, setIsConnected] = useState(socket.connected);
   const [draggable, setDraggable] = useState(true);
   const [position, setPosition] = useState(initialValues.center);
@@ -101,7 +101,7 @@ const SimulatorDashboard = () => {
 
   function DraggableMarker() {
     const markerIcon = L.icon({
-      iconUrl: iconDeliveryAssociate,
+      iconUrl: iconDriverAssociate,
       iconSize: [35, 35], // size of the icon
       popupAnchor: [-3, -20], // point from which the popup should open relative to the iconAnchor
       className: 'marker',
@@ -144,8 +144,8 @@ const SimulatorDashboard = () => {
       popupAnchor: [-3, -20], // point from which the popup should open relative to the iconAnchor
     });
     try {
-      const shipment = shipmentData as IShipment;
-      const coordinates = shipment?.pickupLocation?.coordinates;
+      const passenger = passengerData as IPassenger;
+      const coordinates = passenger?.pickupLocation?.coordinates;
       return Array.isArray(coordinates) ? (
         <Marker position={[coordinates[1], coordinates[0]]} icon={markerIcon}>
           <Popup>Pickup location</Popup>
@@ -163,8 +163,8 @@ const SimulatorDashboard = () => {
       popupAnchor: [-3, -20], // point from which the popup should open relative to the iconAnchor
     });
     try {
-      const shipment = shipmentData as IShipment;
-      const coordinates = shipment?.dropLocation?.coordinates;
+      const passenger = passengerData as IPassenger;
+      const coordinates = passenger?.dropLocation?.coordinates;
       return Array.isArray(coordinates) ? (
         <Marker position={[coordinates[1], coordinates[0]]} icon={markerIcon}>
           <Popup>Drop location</Popup>
@@ -180,11 +180,11 @@ const SimulatorDashboard = () => {
     <div className='container'>
       <div className='col-1'>
         <div>
-          <DriverDashboard socket={socket} setShipmentData={setShipmentData} />
-          {shipmentData._id ? (
-            <ShipmentDashboard
-              shipmentData={shipmentData}
-              setShipmentData={setShipmentData}
+          <DriverDashboard socket={socket} setPassengerData={setPassengerData} />
+          {passengerData._id ? (
+            <PassengerDashboard
+              passengerData={passengerData}
+              setPassengerData={setPassengerData}
             />
           ) : null}
         </div>
@@ -197,12 +197,12 @@ const SimulatorDashboard = () => {
               attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             />
             <DraggableMarker />
-            {shipmentData._id &&
-            shipmentData.status !== ShipmentStatus.delivered ? (
+            {passengerData._id &&
+            passengerData.status !== PassengerStatus.dropped ? (
               <PickUpMarker />
             ) : null}
-            {shipmentData._id &&
-            shipmentData.status !== ShipmentStatus.delivered ? (
+            {passengerData._id &&
+            passengerData.status !== PassengerStatus.dropped ? (
               <DropLocationMarker />
             ) : null}
           </MapContainer>

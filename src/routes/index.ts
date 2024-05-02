@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { pong } from '../controller/ping';
-import * as shipment from '../controller/parCels';
+import * as passenger from '../controller/parCels';
 
 let routes = Router();
 
@@ -10,11 +10,11 @@ let routes = Router();
  */
 routes.get('/ping', pong);
 
-// Shipment
-routes.post('/shipment', shipment.createShipment);
+// Passenger
+routes.post('/passenger', passenger.createPassenger);
 routes.patch(
-  '/shipment/:id/delivery-associate',
-  shipment.patchDeliveryAssociate
+  '/passenger/:id/driver-associate',
+  passenger.patchDriverAssociate
 );
-routes.patch('/shipment/:id/status', shipment.patchStatus);
+routes.patch('/passenger/:id/status', passenger.patchStatus);
 export default routes;

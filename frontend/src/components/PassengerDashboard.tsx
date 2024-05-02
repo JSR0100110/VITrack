@@ -5,80 +5,80 @@ import CardContent from '@mui/material/CardContent';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Divider from '@mui/material/Divider';
-import { IShipment, ShipmentStatus } from '../types';
-import { updateShipmentStatus } from '../api';
+import { IPassenger, PassengerStatus } from '../types';
+import { updatePassengerStatus } from '../api';
 
 type Props = {
-  shipmentData: IShipment;
-  setShipmentData: any;
+  passengerData: IPassenger;
+  setPassengerData: any;
 };
-const statusDisplayName: Record<ShipmentStatus, string> = {
-  [ShipmentStatus.deliveryAssociateAssigned]: 'Driver Assigned',
-  [ShipmentStatus.pickupLocationReached]: 'Reached Pick up location',
-  [ShipmentStatus.dropLocationReached]: 'Reached Drop location',
-  [ShipmentStatus.transporting]: 'Transporting',
-  [ShipmentStatus.delivered]: 'Delivered',
-  [ShipmentStatus.requested]: 'Requested',
-  [ShipmentStatus.cancelled]: 'Cancelled',
+const statusDisplayName: Record<PassengerStatus, string> = {
+  [PassengerStatus.driverAssociateAssigned]: 'Driver Assigned',
+  [PassengerStatus.pickupLocationReached]: 'Reached Pick up location',
+  [PassengerStatus.dropLocationReached]: 'Reached Drop location',
+  [PassengerStatus.transporting]: 'Transporting',
+  [PassengerStatus.dropped]: 'Dropped',
+  [PassengerStatus.requested]: 'Requested',
+  [PassengerStatus.cancelled]: 'Cancelled',
 };
 
 type UpdateAction = {
   actionName: string;
-  statusToUpdate: ShipmentStatus;
+  statusToUpdate: PassengerStatus;
 };
 
-const ShipmentDashboard = (props: Props) => {
-  const { shipmentData, setShipmentData } = props;
+const PassengerDashboard = (props: Props) => {
+  const { passengerData: passengerData, setPassengerData: setPassengerData } = props;
   // Function to determine the next status action based on current status
   const updateAction = (): UpdateAction => {
-    const currentStatus: ShipmentStatus = shipmentData.status;
+    const currentStatus: PassengerStatus = passengerData.status;
     const pickupLocationReached = {
-      actionName: statusDisplayName[ShipmentStatus.pickupLocationReached],
-      statusToUpdate: ShipmentStatus.pickupLocationReached,
+      actionName: statusDisplayName[PassengerStatus.pickupLocationReached],
+      statusToUpdate: PassengerStatus.pickupLocationReached,
     };
     const transporting = {
-      actionName: statusDisplayName[ShipmentStatus.transporting],
-      statusToUpdate: ShipmentStatus.transporting,
+      actionName: statusDisplayName[PassengerStatus.transporting],
+      statusToUpdate: PassengerStatus.transporting,
     };
     const dropLocationReached = {
-      actionName: statusDisplayName[ShipmentStatus.dropLocationReached],
-      statusToUpdate: ShipmentStatus.dropLocationReached,
+      actionName: statusDisplayName[PassengerStatus.dropLocationReached],
+      statusToUpdate: PassengerStatus.dropLocationReached,
     };
-    const delivered = {
-      actionName: statusDisplayName[ShipmentStatus.delivered],
-      statusToUpdate: ShipmentStatus.delivered,
+    const dropped = {
+      actionName: statusDisplayName[PassengerStatus.dropped],
+      statusToUpdate: PassengerStatus.dropped,
     };
     let returnObj: UpdateAction;
     switch (currentStatus) {
-      case ShipmentStatus.deliveryAssociateAssigned:
+      case PassengerStatus.driverAssociateAssigned:
         returnObj = pickupLocationReached;
         break;
-      case ShipmentStatus.pickupLocationReached:
+      case PassengerStatus.pickupLocationReached:
         returnObj = transporting;
         break;
-      case ShipmentStatus.transporting:
+      case PassengerStatus.transporting:
         returnObj = dropLocationReached;
         break;
-      case ShipmentStatus.dropLocationReached:
-        returnObj = delivered;
+      case PassengerStatus.dropLocationReached:
+        returnObj = dropped;
         break;
       default:
-        returnObj = delivered;
+        returnObj = dropped;
         break;
     }
     return returnObj;
   };
 
-  const onShipmentStatusUpdate = async (statusToUpdate: ShipmentStatus) => {
-    const updatedShipmentData = await updateShipmentStatus(
-      shipmentData._id,
+  const onPassengerStatusUpdate = async (statusToUpdate: PassengerStatus) => {
+    const updatedPassengerData = await updatePassengerStatus(
+      passengerData._id,
       statusToUpdate
     );
-    setShipmentData(updatedShipmentData.data);
+    setPassengerData(updatedPassengerData.data);
   };
   return (
     <>
-      {shipmentData._id ? (
+      {passengerData._id ? (
         <div>
           <div
             style={{
@@ -97,11 +97,11 @@ const ShipmentDashboard = (props: Props) => {
                 >
                   <Stack spacing={0.5}>
                     {/* <Typography variant='body1'>
-                      <strong>Id</strong>: {shipmentData?._id}
+                      <strong>Id</strong>: {passengerData?._id}
                     </Typography> */}
                     <Typography variant='body1'>
                       <strong>
-                        Status: {statusDisplayName[shipmentData.status]}
+                        Status: {statusDisplayName[passengerData.status]}
                       </strong>
                     </Typography>
                   </Stack>
@@ -121,7 +121,7 @@ const ShipmentDashboard = (props: Props) => {
               variant='contained'
               size='large'
               onClick={async () => {
-                await onShipmentStatusUpdate(updateAction().statusToUpdate);
+                await onPassengerStatusUpdate(updateAction().statusToUpdate);
               }}
             >
               {updateAction().actionName}
@@ -132,4 +132,4 @@ const ShipmentDashboard = (props: Props) => {
     </>
   );
 };
-export default ShipmentDashboard;
+export default PassengerDashboard;

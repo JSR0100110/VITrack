@@ -1,12 +1,12 @@
 const socketEvents = {
-  // DA means DELIVERY_ASSOCIATE
+  // DA means DRIVER_ASSOCIATE
   UPDATE_DA_LOCATION: 'UPDATE_DA_LOCATION',
   DA_LOCATION_CHANGED: 'DA_LOCATION_CHANGED',
 
-  SHIPMENT_CREATED: 'SHIPMENT_CREATED',
-  SHIPMENT_UPDATED: 'SHIPMENT_UPDATED',
+  PASSENGER_CREATED: 'PASSENGER_CREATED',
+  PASSENGER_UPDATED: 'PASSENGER_UPDATED',
 
-  SUBSCRIBE_TO_SHIPMENT: 'SUBSCRIBE_TO_SHIPMENT',
+  SUBSCRIBE_TO_PASSENGER: 'SUBSCRIBE_TO_PASSENGER',
   SUBSCRIBE_TO_DA: 'SUBSCRIBE_TO_DA',
 
   LEAVE_ROOM: 'LEAVE_ROOM',
@@ -14,8 +14,8 @@ const socketEvents = {
 
 const dbCollections = {
   users: 'users',
-  shipments: 'shipments',
-  deliveryAssociates: 'deliveryAssociates',
+  passengers: 'passengers',
+  driverAssociates: 'driverAssociates',
 };
 
 export { socketEvents, dbCollections };

@@ -1,14 +1,14 @@
-import ShipmentCollection, {
-  IShipmentDocument,
+import PassengerCollection, {
+  IPassengerDocument,
 } from '../../models/Parcels';
-import IShipment from '../../types/IShipment';
+import IPassenger from '../../types/IPassenger';
 
 export default async function createOne(
-  shipment: IShipment
-): Promise<IShipmentDocument> {
+  passenger: IPassenger
+): Promise<IPassengerDocument> {
   try {
-    const collection = await ShipmentCollection();
-    const newDoc = await collection.insertOne(shipment);
+    const collection = await PassengerCollection();
+    const newDoc = await collection.insertOne(passenger);
     const result = await collection.findOne({ _id: newDoc.insertedId });
     return result;
   } catch (error) {

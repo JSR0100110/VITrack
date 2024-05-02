@@ -7,11 +7,11 @@ interface IUpdateDALocation {
   email: string;
   location: Point;
 }
-interface ISubscribeToShipment {
-  shipmentId: string;
+interface ISubscribeToPassenger {
+  passengerId: string;
 }
 interface ISubscribeToDA {
-  deliveryAssociateId: string;
+  driverAssociateId: string;
 }
 interface ILeaveRoom {
   roomId: string;
@@ -35,19 +35,19 @@ const socketHandler = (io: Server) => {
     );
 
     /**
-     * Socket rooms are based on shipmentIds or driverIds
-     * To listen to change streams user needs to subscribe to a shipmentId or deliveryAssociateId
+     * Socket rooms are based on passenger Ids or driverIds
+     * To listen to change streams user needs to subscribe to a passengerId or driverAssociateId
      */
-    // SUBSCRIBE_TO_SHIPMENT
+    // SUBSCRIBE_TO_PASSENGER
     socket.on(
-      socketEvents.SUBSCRIBE_TO_SHIPMENT,
-      (data: ISubscribeToShipment) => {
-        socket.join(data.shipmentId);
+      socketEvents.SUBSCRIBE_TO_PASSENGER,
+      (data: ISubscribeToPassenger) => {
+        socket.join(data.passengerId);
       }
     );
     // SUBSCRIBE_TO_DA
     socket.on(socketEvents.SUBSCRIBE_TO_DA, (data: ISubscribeToDA) => {
-      socket.join(data.deliveryAssociateId);
+      socket.join(data.driverAssociateId);
     });
 
     // LEAVE_ROOM

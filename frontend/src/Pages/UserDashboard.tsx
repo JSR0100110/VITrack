@@ -8,13 +8,13 @@ import 'leaflet/dist/leaflet.css';
 
 import UserInfo from '../components/UserInfo';
 import DraggableMarker from '../components/DraggableMarker';
-import ShipmentInfo from '../components/ShipmentInfo';
+import PassengerInfo from '../components/PassengerInfo';
 import {
   DashboardStatus,
   State,
   IAction,
-  IShipment,
-  ShipmentStatus,
+  IPassenger,
+  PassengerStatus,
 } from '../types';
 import {
   USER_EMAIL_DEFAULT,
@@ -26,7 +26,7 @@ import {
   mapInitialViewProps,
   ACTIONS,
 } from '../constants';
-import { createShipment } from '../api';
+import { createPassenger } from '../api';
 import './dashboard.css';
 
 const socket = io(API_URL);
@@ -39,17 +39,17 @@ const initialState: State = {
   isDropDraggable: false,
   isShowDropMarker: false,
   driverLocation: null,
-  dashboardStatus: DashboardStatus.NO_SHIPMENT,
+  dashboardStatus: DashboardStatus.NO_PASSENGER,
 };
 
 function reducer(state: State, action: IAction): State {
   switch (action.type) {
-    case ACTIONS.NEW_DELIVERY_CLICKED:
+    case ACTIONS.NEW_DROPP_CLICKED:
       return {
         ...state,
         isPickupDraggable: true,
         isShowPickupMarker: true,
-        dashboardStatus: DashboardStatus.SHIPMENT_INITIATED,
+        dashboardStatus: DashboardStatus.PASSENGER_INITIATED,
       };
     case ACTIONS.SET_DRIVER_LOCATION:
       return {
@@ -100,10 +100,10 @@ function reducer(state: State, action: IAction): State {
         ...state,
         dashboardStatus: DashboardStatus.DROP_LOCATION_REACHED,
       };
-    case ACTIONS.DELIVERED:
+    case ACTIONS.DROPPED:
       return {
         ...state,
-        dashboardStatus: DashboardStatus.DELIVERED,
+        dashboardStatus: DashboardStatus.DROPPED,
       };
     default:
       console.log('default action');
@@ -111,13 +111,13 @@ function reducer(state: State, action: IAction): State {
   }
 }
 
-const shipmentStatusActionMapper: Record<ShipmentStatus, IAction> = {
+const passengerStatusActionMapper: Record<PassengerStatus, IAction> = {
   requested: { type: 'Default' },
-  deliveryAssociateAssigned: { type: ACTIONS.ASSOCIATE_ASSIGNED },
+  driverAssociateAssigned: { type: ACTIONS.ASSOCIATE_ASSIGNED },
   pickupLocationReached: { type: ACTIONS.PICKUP_LOCATION_REACHED },
   transporting: { type: ACTIONS.TRANSPORTING },
   dropLocationReached: { type: ACTIONS.DROP_LOCATION_REACHED },
-  delivered: { type: ACTIONS.DELIVERED },
+  dropped: { type: ACTIONS.DROPPED },
   cancelled: { type: ACTIONS.CANCELLED },
 };
 
@@ -164,18 +164,18 @@ const UserDashboard = () => {
     });
 
     // Listens to Driver updates once subscribed
-    socket.on(socketEvents.SHIPMENT_UPDATED, (data: IShipment) => {
+    socket.on(socketEvents.PASSENGER_UPDATED, (data: IPassenger) => {
       try {
         console.log({ data });
-        // Subscribe to delivery associate
-        if (data.deliveryAssociateId) {
+        // Subscribe to driver associate
+        if (data.driverAssociateId) {
           socket.emit(socketEvents.SUBSCRIBE_TO_DA, {
-            deliveryAssociateId: data.deliveryAssociateId,
+            driverAssociateId: data.driverAssociateId,
           });
         }
-        // Dispatch Action on Shipment status change
+        // Dispatch Action on Passenger status change
         if (data.status) {
-          dispatch(shipmentStatusActionMapper[data.status]);
+          dispatch(passengerStatusActionMapper[data.status]);
         }
       } catch (error) {
         console.error(error);
@@ -204,9 +204,9 @@ const UserDashboard = () => {
     };
     dispatch(action);
   };
-  const onNewDeliveryClick = () => {
+  const onNewDriverClick = () => {
     const action = {
-      type: ACTIONS.NEW_DELIVERY_CLICKED,
+      type: ACTIONS.NEW_DROPP_CLICKED,
       payload: {},
     };
     dispatch(action);
@@ -227,24 +227,24 @@ const UserDashboard = () => {
         type: 'Point',
         coordinates: [state.dropLocation.lng, state.dropLocation.lat],
       };
-      // Call API to Create new Shipment
-      const createShipmentOp = await createShipment(pickupPoint, dropPoint);
-      const shipment = createShipmentOp.data;
-      // Subscribe to MongoDB Change Stream via Socket io for the created Shipment
-      socket.emit(socketEvents.SUBSCRIBE_TO_SHIPMENT, {
-        shipmentId: shipment._id,
+      // Call API to Create new Passenger
+      const createPassengerOp = await createPassenger(pickupPoint, dropPoint);
+      const passenger = createPassengerOp.data;
+      // Subscribe to MongoDB Change Stream via Socket io for the created Passenger
+      socket.emit(socketEvents.SUBSCRIBE_TO_PASSENGER, {
+        passengerId: passenger._id,
       });
     } catch (error) {
       console.error(error);
     }
   };
 
-  const ButtonNewDelivery = () => {
+  const ButtonNewDriver = () => {
     return (
       <Button
         variant='contained'
         onClick={() => {
-          onNewDeliveryClick();
+          onNewDriverClick();
         }}
       >
         New Passenger
@@ -280,16 +280,16 @@ const UserDashboard = () => {
     <div className='container'>
       <div className='col-1'>
         <UserInfo />
-        {/* Shipment info */}
+        {/* Passenger info */}
         <div className='flex-center'>
-          <ShipmentInfo dashboardStatus={state.dashboardStatus} />
+          <PassengerInfo dashboardStatus={state.dashboardStatus} />
         </div>
         {/* Action button */}
         <div className='flex-center'>
-          {state.dashboardStatus === DashboardStatus.NO_SHIPMENT && (
-            <ButtonNewDelivery />
+          {state.dashboardStatus === DashboardStatus.NO_PASSENGER && (
+            <ButtonNewDriver />
           )}
-          {state.dashboardStatus === DashboardStatus.SHIPMENT_INITIATED && (
+          {state.dashboardStatus === DashboardStatus.PASSENGER_INITIATED && (
             <ButtonConfirmPickUp />
           )}
           {state.dashboardStatus === DashboardStatus.PICKUP_SELECTED && (

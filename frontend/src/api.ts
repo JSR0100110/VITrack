@@ -1,9 +1,9 @@
 import axios from 'axios';
 import { Point } from 'geojson';
 import { API_URL, USER_EMAIL_DEFAULT } from './constants';
-import { ShipmentStatus, ShipmentRes } from './types';
+import { PassengerStatus as PassengerStatus, PassengerRes as PassengerRes } from './types';
 
-export const createShipment = async (
+export const createPassenger = async (
   pickupLocation: Point,
   dropLocation: Point
 ): Promise<any> => {
@@ -11,40 +11,40 @@ export const createShipment = async (
   const data = { pickupLocation, dropLocation, email };
   const config = {
     method: 'post',
-    url: `${API_URL}/shipment`,
+    url: `${API_URL}/passenger`,
     data: data,
   };
   const response = await axios(config);
   return response.data as any;
 };
 
-export const updateShipmentStatus = async (
+export const updatePassengerStatus = async (
   id: string,
-  status: ShipmentStatus
-): Promise<ShipmentRes> => {
+  status: PassengerStatus
+): Promise<PassengerRes> => {
   const requestBody = { status };
   try {
     const response = await axios.patch(
-      `${API_URL}/shipment/${id}/status`,
+      `${API_URL}/passenger/${id}/status`,
       requestBody
     );
-    return response.data as ShipmentRes;
+    return response.data as PassengerRes;
   } catch (error) {
     throw error;
   }
 };
 
-export const updateShipmentDeliveryAssociate = async (
+export const updatePassengerDriverAssociate = async (
   id: string,
   email: string
-): Promise<ShipmentRes> => {
+): Promise<PassengerRes> => {
   const requestBody = { email };
   try {
     const response = await axios.patch(
-      `${API_URL}/shipment/${id}/delivery-associate`,
+      `${API_URL}/passenger/${id}/driver-associate`,
       requestBody
     );
-    return response.data as ShipmentRes;
+    return response.data as PassengerRes;
   } catch (error) {
     throw error;
   }

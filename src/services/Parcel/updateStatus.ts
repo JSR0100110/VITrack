@@ -1,13 +1,13 @@
 import { ObjectId } from 'mongodb';
-import ShipmentCollection, { IShipmentDocument } from '../../models/Parcels';
-import { ShipmentStatus } from '../../types/IShipment';
+import PassengerCollection, { IPassengerDocument } from '../../models/Parcels';
+import { PassengerStatus } from '../../types/IPassenger';
 
 export default async function updateStatus(
   _id: string,
-  status: ShipmentStatus
-): Promise<IShipmentDocument> {
+  status: PassengerStatus
+): Promise<IPassengerDocument> {
   try {
-    const collection = await ShipmentCollection();
+    const collection = await PassengerCollection();
     await collection.findOneAndUpdate(
       { _id: new ObjectId(_id) },
       { $set: { status } }

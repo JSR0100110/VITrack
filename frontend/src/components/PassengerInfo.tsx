@@ -7,10 +7,10 @@ import { infoMsgs } from '../constants';
 type PropType = {
   dashboardStatus: DashboardStatus;
 };
-export default function ShipmentInfo(props: PropType) {
+export default function PassengerInfo(props: PropType) {
   const { title, msg } = infoMsgs[props.dashboardStatus];
   const severity =
-    props.dashboardStatus === DashboardStatus.DELIVERED ? 'success' : 'info';
+    props.dashboardStatus === DashboardStatus.DROPPED ? 'success' : 'info';
   return (
     <>
       {title && msg ? (

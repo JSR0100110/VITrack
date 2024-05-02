@@ -6,8 +6,8 @@ import socketHandler from './socketHandler';
 import dbClient from './dbClient';
 import createAllIndexes from './createIndex';
 import seed from './seed';
-import deliveryAssociateWatchers from './watchers/drivers';
-import shipmentWatchers from './watchers/shipment';
+import driverAssociateWatchers from './watchers/drivers';
+import passengerWatchers from './watchers/passenger';
 
 const server = http.createServer(app);
 const io = new Server(server, {
@@ -31,8 +31,8 @@ server.listen(app.get('port'), async () => {
     socketHandler(io);
 
     // Initialize MongoDB ChangeStream watchers
-    await deliveryAssociateWatchers(io);
-    await shipmentWatchers(io);
+    await driverAssociateWatchers(io);
+    await passengerWatchers(io);
     
     // Server start logs
     console.log('node version', process.version);

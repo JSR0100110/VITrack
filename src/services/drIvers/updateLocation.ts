@@ -1,12 +1,12 @@
 import { Point } from 'geojson';
-import DeliveryAssociateCollection from '../../models/driver';
+import DriverAssociateCollection from '../../models/driver';
 
 const updateLocation = async (
   email: string,
   location: Point
 ): Promise<void> => {
   try {
-    const collection = await DeliveryAssociateCollection();
+    const collection = await DriverAssociateCollection();
     await collection.findOneAndUpdate(
       { email },
       { $set: { currentLocation: location } }

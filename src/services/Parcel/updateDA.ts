@@ -1,15 +1,15 @@
 import { ObjectId } from 'mongodb';
-import ShipmentCollection, { IShipmentDocument } from '../../models/Parcels';
+import PassengerCollection, { IPassengerDocument } from '../../models/Parcels';
 
 export default async function updateDA(
   _id: string,
-  deliveryAssociateId: string
-): Promise<IShipmentDocument> {
+  driverAssociateId: string
+): Promise<IPassengerDocument> {
   try {
-    const collection = await ShipmentCollection();
+    const collection = await PassengerCollection();
     await collection.findOneAndUpdate(
       { _id: new ObjectId(_id) },
-      { $set: { deliveryAssociateId } }
+      { $set: { driverAssociateId: driverAssociateId } }
     );
     const result = await collection.findOne({ _id: new ObjectId(_id) });
     return result;

@@ -1,11 +1,11 @@
 import L from 'leaflet';
 import iconPickup from './assets/icon_pickup.svg';
 import iconDrop from './assets/icon_drop.svg';
-import iconDriver from './assets/truck.svg';
+import iconDriver from './assets/bus.svg';
 import { IInfo, DashboardStatus } from './types';
 
-export const DRIVER_EMAIL_DEFAULT = 'john@example.com';
-export const USER_EMAIL_DEFAULT = 'adam@example.com';
+export const DRIVER_EMAIL_DEFAULT = 'ayush.garg2020@vitStaff.ac.in';
+export const USER_EMAIL_DEFAULT = 'chirag.grover2020@vitstudent.ac.in';
 
 export const API_URL = 'http://localhost:5050';
 
@@ -31,17 +31,17 @@ export const driverMarkerIcon = L.icon({
 });
 
 export const socketEvents = {
-  SUBSCRIBE_TO_SHIPMENT: 'SUBSCRIBE_TO_SHIPMENT',
+  SUBSCRIBE_TO_PASSENGER: 'SUBSCRIBE_TO_PASSENGER',
   SUBSCRIBE_TO_DA: 'SUBSCRIBE_TO_DA',
   DA_LOCATION_CHANGED: 'DA_LOCATION_CHANGED',
   LEAVE_ROOM: 'LEAVE_ROOM',
-  SHIPMENT_UPDATED: 'SHIPMENT_UPDATED',
-  SHIPMENT_CREATED: 'SHIPMENT_CREATED',
+  PASSENGER_UPDATED: 'PASSENGER_UPDATED',
+  PASSENGER_CREATED: 'PASSENGER_CREATED',
   UPDATE_DA_LOCATION: 'UPDATE_DA_LOCATION',
 };
 
 export const infoMsgs: Record<DashboardStatus, IInfo> = {
-  SHIPMENT_INITIATED: {
+  PASSENGER_INITIATED: {
     title: 'Select Pickup Location',
     msg: 'Move the Pickup marker on the map to choose your pickup location. Click confirm to continue.',
   },
@@ -50,14 +50,14 @@ export const infoMsgs: Record<DashboardStatus, IInfo> = {
     msg: 'Move the Flag marker on the map to choose your Drop location. Click confirm to continue.',
   },
   DROP_SELECTED: {
-    title: 'Searching for delivery Associates',
-    msg: 'Please wait, we are looking for associates to handle your delivery',
+    title: 'Searching for driver Associates',
+    msg: 'Please wait, we are looking for associates to handle your drop',
   },
-  NO_SHIPMENT: { title: '', msg: '' },
+  NO_PASSENGER: { title: '', msg: '' },
   SEARCHING_ASSOCIATES: { title: '', msg: '' },
   ASSOCIATE_ASSIGNED: {
     title: 'Driver Assigned',
-    msg: 'An Associate has been assigned to handle your delivery and will soon reach your pickup location',
+    msg: 'An Associate has been assigned to handle your drop and will soon reach your pickup location',
   },
   PICKUP_LOCATION_REACHED: {
     title: 'Associate reached Pickup location',
@@ -71,16 +71,16 @@ export const infoMsgs: Record<DashboardStatus, IInfo> = {
     title: 'Reached Drop location',
     msg: 'Driver reached drop location',
   },
-  DELIVERED: {
-    title: 'Delivered',
-    msg: 'The passenger has been delivered successfully',
+  DROPPED: {
+    title: 'Dropped',
+    msg: 'The passenger has been dropped successfully',
   },
   CANCELLED: { title: '', msg: '' },
 };
 
 export const ACTIONS = {
   FIRST_LOAD: 'FIRST_LOAD',
-  NEW_DELIVERY_CLICKED: 'NEW_DELIVERY_CLICKED',
+  NEW_DROPP_CLICKED: 'NEW_DROPP_CLICKED',
   SET_DRIVER_LOCATION: 'SET_DRIVER_LOCATION',
   SET_PICKUP_LOCATION: 'SET_PICKUP_LOCATION',
   SET_DROP_LOCATION: 'SET_DROP_LOCATION',

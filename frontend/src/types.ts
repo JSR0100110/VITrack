@@ -7,25 +7,25 @@ export interface AppRes {
   errMsg?: string;
 }
 
-export enum ShipmentStatus {
+export enum PassengerStatus {
   requested = 'requested',
-  deliveryAssociateAssigned = 'deliveryAssociateAssigned',
+  driverAssociateAssigned = 'driverAssociateAssigned',
   pickupLocationReached = 'pickupLocationReached',
   transporting = 'transporting',
   dropLocationReached = 'dropLocationReached',
-  delivered = 'delivered',
+  dropped = 'dropped',
   cancelled = 'cancelled',
 }
-export interface IShipment {
+export interface IPassenger {
   _id: string;
   pickupLocation: Point;
   dropLocation: Point;
   userId: string;
-  status: ShipmentStatus;
-  deliveryAssociateId?: string;
+  status: PassengerStatus;
+  driverAssociateId?: string;
 }
-export interface ShipmentRes extends AppRes {
-  data: IShipment;
+export interface PassengerRes extends AppRes {
+  data: IPassenger;
 }
 
 export interface IUser {
@@ -45,8 +45,8 @@ export interface TokenRes extends AppRes {
 }
 
 export enum DashboardStatus {
-  NO_SHIPMENT = 'NO_SHIPMENT',
-  SHIPMENT_INITIATED = 'SHIPMENT_INITIATED',
+  NO_PASSENGER = 'NO_PASSENGER',
+  PASSENGER_INITIATED = 'PASSENGER_INITIATED',
   PICKUP_SELECTED = 'PICKUP_SELECTED',
   DROP_SELECTED = 'DROP_SELECTED',
   SEARCHING_ASSOCIATES = 'SEARCHING_ASSOCIATES',
@@ -54,7 +54,7 @@ export enum DashboardStatus {
   PICKUP_LOCATION_REACHED = 'PICKUP_LOCATION_REACHED',
   TRANSPORTING = 'TRANSPORTING',
   DROP_LOCATION_REACHED = 'DROP_LOCATION_REACHED',
-  DELIVERED = 'DELIVERED',
+  DROPPED = 'DROPPED',
   CANCELLED = 'CANCELLED',
 }
 export interface IInfo {
@@ -76,16 +76,16 @@ export interface IAction {
   payload?: any;
 }
 
-export enum DeliveryAssociateStatus {
+export enum driverAssociateStatus {
   available = 'available',
-  delivering = 'delivering',
+  dropping = 'dropping',
   off = 'off',
 }
-export interface IDeliveryAssociate {
+export interface IdriverAssociate {
   _id: string;
   email: string;
   name: string;
-  status: DeliveryAssociateStatus;
+  status: driverAssociateStatus;
   currentLocation: Point;
 }
 export interface IUpdateDALocation {
